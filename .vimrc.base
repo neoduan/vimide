@@ -103,3 +103,11 @@ cnoremap w! %!sudo tee > /dev/null %
 nmap <F3> :set invpaste paste?<CR>
 
 nmap <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR> 
+
+set grepprg=ack
+nmap <F5> :Ack <C-R>=expand("<cword>")<CR><CR>
+nmap <F11> :TagbarToggle<CR>
+
+"代替tab的功能,tab被supertab插件占用
+nmap <c-i> a    
+
