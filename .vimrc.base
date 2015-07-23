@@ -87,4 +87,19 @@ set foldmethod=indent
 " 启动 vim 时打开折叠代码
 set foldenable
 
+" 退格键删除
 set backspace=indent,eol,start
+
+" 插入模式下光标移动
+inoremap <C-h> <Left>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-l> <Right>
+
+"强制保存快捷键<ctrl +s> 需要在.bashrc 中加入 stty-ixon，因为C-s和C-q是终端的保留按键，所以对没有作用
+cnoremap w! %!sudo tee > /dev/null %
+
+"切换粘贴模式
+nmap <F3> :set invpaste paste?<CR>
+
+nmap <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR> 

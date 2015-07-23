@@ -1,7 +1,7 @@
 " vundle 安装和配置
 " git clone http://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 " 将下面配置文件加入到.vimrc文件中
-
+"
 set nocompatible " 必须
 filetype off     " 必须
 
@@ -13,9 +13,9 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 " 其他插件
-
 " 显示代码缩进
-Bundle 'nathanaelkane/vim-indent-guides'  
+"Bundle 'nathanaelkane/vim-indent-guides'  
+Bundle 'Yggdroot/indentLine'
 
 " 语法检查错误
 Bundle 'scrooloose/syntastic'
@@ -25,26 +25,56 @@ Bundle 'bufexplorer.zip'
 
 "快速注释插件，使用说明在下方
 Bundle 'scrooloose/nerdcommenter'
+"Just one NERDTree, always and ever,始终打开tab页
+Bundle 'jistr/vim-nerdtree-tabs'
 
 " 用于括号与引号自动补全
-Bundle 'jiangmiao/auto-pairs'
+Bundle 'kana/vim-smartinput'
 
-Bundle 'Lokaltog/vim-powerline'
+" 状态栏
+Bundle  'bling/vim-airline'
+" 支持git
+Bundle 'tpope/vim-fugitive'
+
+"文件管理器
+Bundle 'scrooloose/nerdtree'
+
+" 关键字补全、文件路径补全、tag补全
+Bundle 'Shougo/neocomplcache'
+
+"TAB键增加功能
+Bundle 'ervandew/supertab'
+
+"代码符号
+Bundle 'majutsushi/tagbar'
+
+"查找文件
+Bundle 'ctrlp.vim'
+
+"搜索
+"curl http://beyondgrep.com/ack-2.14-single-file > ~/bin/ack && chmod 0755 !#:3
+Bundle 'mileszs/ack.vim'
+
+"go 环境
+Bundle 'fatih/vim-go'
 
 "快捷键一览
-"F4:查看代码缩进
+"F3  : 进入粘贴模式
+"F4  : 查看代码缩进
+"F5  : Ack搜索文件
+"F6  : 进入查找文件模式
+"F10 : 展开目录树
+"F11 : 展开代码树
+"F12 : 生成tag
 
 "------------------------------------------------------------------------------
 " < nathanaelkane/vim-indent-guides 插件配置 >
 "------------------------------------------------------------------------------
-" 随 vim 自启动
-let g:indent_guides_enable_on_vim_startup=1
-" 从第二层开始可视化显示缩进
-let g:indent_guides_start_level=2
-" 色块宽度
-let g:indent_guides_guide_size=1
-" 快捷键 i 开/关缩进可视化
-nmap <silent> <F4> :IndentGuidesToggle<CR>
+let g:indentLine_noConcealCursor = 1
+let g:indentLine_color_term=0
+let g:indentLine_char='|'
+" 快捷键 F4 开/关缩进可视化
+nmap  <F4> :IndentLinesToggle<CR>
 "------------------------------------------------------------------------------
 
 "------------------------------------------------------------------------------
@@ -58,15 +88,96 @@ nmap <silent> <F4> :IndentGuidesToggle<CR>
 " -----------------------------------------------------------------------------
 
 " -----------------------------------------------------------------------------
-" < vim-powerline 插件配置 >
+" < vim-airline git 插件配置 >
 "------------------------------------------------------------------------------
 set laststatus=2
-set t_Co=256
-let g:Powerline_symbols='fancy'
-set encoding=utf-8
+let g:airline_powerline_fonts = 1
+let g:airline_theme="tomorrow"
+set laststatus=2
+"let g:airline_section_a = airline#section#create(['%{fugitive#statusline()}'])
+"let g:airline_section_x = airline#section#create(['%{getcwd()}'])
+let g:airline_section_z = '%{strftime("%c")}'
 " -----------------------------------------------------------------------------
 
+" -----------------------------------------------------------------------------
+" <NERDTree插件配置 >
+"------------------------------------------------------------------------------
+let g:nerdtree_tabs_open_on_console_startup=1
+let NERDTreeWinPos='left'
+let g:NERDTreeDirArrows = 0
+let NERDTreeMinimalUI = 1
+nmap <F10> :NERDTreeToggle<CR>
+"------------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
+" < neocomplcache 插件配置 >
+"------------------------------------------------------------------------------
+" 关键字补全、文件路径补全、tag补全等等，各种，非常好用，速度超快。
+let g:neocomplcache_enable_at_startup = 1  "vim 启动时启用插件
+"let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
+" 在弹出补全列表后用 <c-p> 或 <c-n> 进行上下选择效果比较好
+"------------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
+" < supertab 插件配置 >
+"------------------------------------------------------------------------------
+let g:SuperTabDefaultCompletionType = "<c-n>"
+let g:SuperTabContextDefaultCompletionType = "<c-n>"
+" -----------------------------------------------------------------------------
+
+"------------------------------------------------------------------------------
+" < ctrlp 插件配置 >
+"------------------------------------------------------------------------------
+nmap <F6> <Esc>:CtrlP<CR>
+let g:ctrlp_working_path_mode = 'cra'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+let g:ctrlp_custom_ignore = {
+            \ 'dir':  '\v[\/]\.(git|hg|svn)$|(node_modules|_prj|tmp)$',
+            \ 'file': '\v\.(exe|so|dll)$|.prjide',
+            \ 'link': 'some_bad_symbolic_links',
+            \ }
+"------------------------------------------------------------------------------
+
+"------------------------------------------------------------------------------
+" < scrooloose/syntastic 插件配置 >
+"------------------------------------------------------------------------------
+let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
+let g:syntastic_go_checkers = ['go']
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+"------------------------------------------------------------------------------
+
+" -----------------------------------------------------------------------------
+" <go插件配置 >
+"------------------------------------------------------------------------------
+au FileType go nmap <Leader>s <Plug>(go-implements)
+au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage)
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+au FileType go nmap <Leader>e <Plug>(go-rename)
+let g:go_fmt_fail_silently = 1
+let g:go_fmt_command = "goimports"
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+"------------------------------------------------------------------------------
+
 if filereadable(expand("~/.vimrc.base"))
-  source ~/.vimrc.base
+     source ~/.vimrc.base
 endif
 
+set grepprg=ack
+nmap <F5> :Ack <C-R>=expand("<cword>")<CR><CR>
+nmap <F11> :TagbarToggle<CR>
+unmap <c-i>
+nmap <c-i>      
